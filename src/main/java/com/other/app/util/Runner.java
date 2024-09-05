@@ -25,6 +25,7 @@ public class Runner implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
+			TimeUnit.SECONDS.sleep(20);
 			while(true) {
 				int positionProducer1 = (int) (Math.random() * WORDS.length);
 				int positionProducer2 = (int) (Math.random() * WORDS.length);

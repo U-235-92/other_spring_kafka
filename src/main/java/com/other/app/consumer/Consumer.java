@@ -33,7 +33,7 @@ public class Consumer {
 				Formatter formatter = new Formatter() {
 					@Override
 					public String format(LogRecord logRecord) {
-						return logRecord.getMessage();
+						return logRecord.getMessage() + "\n";
 					}
 				};
 				super.setFormatter(formatter);
