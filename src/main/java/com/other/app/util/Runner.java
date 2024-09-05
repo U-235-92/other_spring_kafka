@@ -16,16 +16,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Runner implements ApplicationRunner {
 
-	private final Producer producer;
-	private String[] words = {"apple", "orange", "lemon", "banana"};	
+	private static final String[] WORDS = {"apple", "orange", "lemon", "banana"};
+	
+	private final Producer firstProducer;
+	private final Producer secondProducer;
+	
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		ExecutorService executorService = Executors.newFixedThreadPool(1);
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
 			while(true) {
-				int position = (int) (Math.random() * words.length);
-				producer.send("Hello, " + words[position]);
-				TimeUnit.MILLISECONDS.sleep(500);
+				int positionProducer1 = (int) (Math.random() * WORDS.length);
+				int positionProducer2 = (int) (Math.random() * WORDS.length);
+				firstProducer.send("Hello, " + WORDS[positionProducer1] + " from [First Producer]");
+				secondProducer.send("Hello, " + WORDS[positionProducer2] + " from [Second Producer]");
+				TimeUnit.MILLISECONDS.sleep(50);
 			}
 		});
 	}
