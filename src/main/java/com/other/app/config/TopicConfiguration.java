@@ -16,8 +16,10 @@ public class TopicConfiguration {
 
 	@Value("${kafka.properties.bootstrap-server}")
 	private String bootstrapServer;
-	@Value("${kafka.properties.topic-name}")
-	private String topicName;
+	@Value("${kafka.properties.topic-name.fun}")
+	private String funTopicName;
+	@Value("${kafka.properties.topic-name.easy}")
+	private String easyTopicName;
 	
 	@Bean
 	KafkaAdmin kafkaAdmin() {
@@ -28,7 +30,12 @@ public class TopicConfiguration {
 	}
 	
 	@Bean
-	NewTopic stringMessagesTopic() {
-		return TopicBuilder.name(topicName).partitions(1).replicas(3).build();
+	NewTopic funTopic() {
+		return TopicBuilder.name(funTopicName).partitions(10).replicas(1).build();
+	}
+	
+	@Bean
+	NewTopic easyTopic() {
+		return TopicBuilder.name(easyTopicName).partitions(10).replicas(1).build();
 	}
 }

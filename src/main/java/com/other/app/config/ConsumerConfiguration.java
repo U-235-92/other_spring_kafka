@@ -29,9 +29,10 @@ public class ConsumerConfiguration {
 		Map<String, Object> properties = new HashMap<>();
 		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
 		properties.put(ConsumerConfig.CLIENT_ID_CONFIG, clientId);
-		properties.put(ConsumerConfig.GROUP_ID_CONFIG, "kafka-message-consumers");
+		properties.put(ConsumerConfig.GROUP_ID_CONFIG, "fun-consumers");
 		properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+		properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
 		return properties;
 	}
 	
@@ -45,7 +46,7 @@ public class ConsumerConfiguration {
 	KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, String> containerFactory = new ConcurrentKafkaListenerContainerFactory<>();
 		containerFactory.setConsumerFactory(consumerFactory());
-		containerFactory.setConcurrency(3);
+		containerFactory.setConcurrency(2);
 		return containerFactory;
 	}
 }

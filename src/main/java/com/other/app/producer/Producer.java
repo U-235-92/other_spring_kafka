@@ -45,11 +45,14 @@ public class Producer {
 	}
 	
 	private final KafkaTemplate<String, String> kafkaTemplate;
-	@Value("${kafka.properties.topic-name}")
-	private String topic;
+	@Value("${kafka.properties.topic-name.fun}")
+	private String funTopic;
+	@Value("${kafka.properties.topic-name.easy}")
+	private String easyTopic;
 	
 	public void send(String message) {
-		kafkaTemplate.send(topic, message);
+		kafkaTemplate.send(funTopic, message);
+		kafkaTemplate.send(easyTopic, message);
 		kafkaTemplate.setProducerListener(new ProducerListener<String, String>() {
 			@Override
 			public void onSuccess(ProducerRecord<String, String> producerRecord, RecordMetadata recordMetadata) {
