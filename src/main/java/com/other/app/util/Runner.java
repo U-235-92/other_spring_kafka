@@ -1,5 +1,6 @@
 package com.other.app.util;
 
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -15,21 +16,18 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class Runner implements ApplicationRunner {
-
-	private static final String[] WORDS = {"apple", "orange", "lemon", "banana"};
 	
-	private final Producer firstProducer;
+	private final Producer producer;
 	
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executorService.submit(() -> {
-			sleep(20);
+			sleep(5);
 			System.out.println("[START GENERTING MESSAGES]");
 			int count = 0;
 			while(count++ < 10) {
-				int positionProducer1 = (int) (Math.random() * WORDS.length);
-				firstProducer.send("Hello, " + WORDS[positionProducer1] + " from [First Producer]");
+				producer.send("Hello, " + UUID.randomUUID().toString().substring(0, 5));
 			}
 			System.out.println("[FINISH GENERTING MESSAGES]");
 		});
@@ -37,7 +35,7 @@ public class Runner implements ApplicationRunner {
 	
 	private void sleep(int seconds) {
 		try {
-			TimeUnit.SECONDS.sleep(5);
+			TimeUnit.SECONDS.sleep(seconds);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

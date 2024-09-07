@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.RoundRobinAssignor;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,10 +30,11 @@ public class ConsumerConfiguration {
 		Map<String, Object> properties = new HashMap<>();
 		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
 		properties.put(ConsumerConfig.CLIENT_ID_CONFIG, clientId);
-		properties.put(ConsumerConfig.GROUP_ID_CONFIG, "fun-consumers");
+		properties.put(ConsumerConfig.GROUP_ID_CONFIG, "abc-consumers");
 		properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+		properties.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
 		return properties;
 	}
 	
@@ -46,7 +48,7 @@ public class ConsumerConfiguration {
 	KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, String> containerFactory = new ConcurrentKafkaListenerContainerFactory<>();
 		containerFactory.setConsumerFactory(consumerFactory());
-		containerFactory.setConcurrency(2);
+		containerFactory.setConcurrency(9);
 		return containerFactory;
 	}
 }

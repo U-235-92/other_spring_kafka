@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.RoutingKafkaTemplate;
 import org.springframework.kafka.support.ProducerListener;
 import org.springframework.stereotype.Component;
 
@@ -44,23 +44,26 @@ public class Producer {
 		LOGGER.setLevel(Level.OFF);
 	}
 	
-	private final KafkaTemplate<String, String> kafkaTemplate;
-	@Value("${kafka.properties.topic-name.fun}")
-	private String funTopic;
-	@Value("${kafka.properties.topic-name.easy}")
-	private String easyTopic;
+	private final RoutingKafkaTemplate kafkaTemplate;
+	@Value("${kafka.properties.topic-name.a}")
+	private String aTopic;
+	@Value("${kafka.properties.topic-name.b}")
+	private String bTopic;
+	@Value("${kafka.properties.topic-name.c}")
+	private String cTopic;
 	
 	public void send(String message) {
-		kafkaTemplate.send(funTopic, message);
-		kafkaTemplate.send(easyTopic, message);
-		kafkaTemplate.setProducerListener(new ProducerListener<String, String>() {
+		kafkaTemplate.send(aTopic, message);
+		kafkaTemplate.send(bTopic, message);
+		kafkaTemplate.send(cTopic, message);
+		kafkaTemplate.setProducerListener(new ProducerListener<Object, Object>() {
 			@Override
-			public void onSuccess(ProducerRecord<String, String> producerRecord, RecordMetadata recordMetadata) {
+			public void onSuccess(ProducerRecord<Object, Object> producerRecord, RecordMetadata recordMetadata) {
 				LOGGER.info("[SUCCESS SEND A MESSAGE] Topic: " + producerRecord.topic() + " Partition: " + producerRecord.partition());
 			}
 			
 			@Override
-			public void onError(ProducerRecord<String, String> producerRecord, RecordMetadata recordMetadata,
+			public void onError(ProducerRecord<Object, Object> producerRecord, RecordMetadata recordMetadata,
 					Exception exception) {
 				LOGGER.warning("[ERROR OCCURED DURING SEND A MESSAGE]");
 			}
